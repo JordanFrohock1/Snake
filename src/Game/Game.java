@@ -27,17 +27,20 @@ public class Game extends JPanel {
 	private Direction nextDirection = Direction.UP;
 	private int numberOfRows;
 	private int numberOfColumns;
-	private final int MOVEMENT_DELAY = 22;
+	private final int MOVEMENT_DELAY = 22; // higher value == snake moves slower
 	private int movementDelayCounter;
-	private int score = 0; // NEW: keeps track of score
+
+	private int score = 0; // NEW: score variable
 
 	public Game() {
 		Window.setTitle("Snake");
 		setDoubleBuffered(true);
 
 		snake = new Snake(180, 300, GRID_SIZE);
+
 		pellet = new Pellet();
 
+		// game loop
 		timer = new Timer(1, new ActionListener() {
 
 			@Override
@@ -55,22 +58,24 @@ public class Game extends JPanel {
 					nextDirection = null;
 				}
 
+				// game over if snake hits wall
 				if (snake.getXLocation() < 0 || snake.getXLocation() > getWidth()
 						|| snake.getYLocation() < 0 || snake.getYLocation() > getHeight()) {
 					System.exit(1);
 				}
 
+				// game over if snake hits its tail
 				if (snake.hasCollidedWithTail()) {
 					System.exit(1);
 				}
 
-				// pellet eaten
+				// snake eats pellet
 				if (snake.getXLocation() == pellet.getXLocation() && snake.getYLocation() == pellet.getYLocation()) {
 					Point newPelletLocation = getRandomGridCoords();
 					pellet.setXLocation(newPelletLocation.x * GRID_SIZE);
 					pellet.setYLocation(newPelletLocation.y * GRID_SIZE);
-
 					snake.addSegment();
+
 					score++; // NEW: increase score
 				}
 
@@ -80,6 +85,7 @@ public class Game extends JPanel {
 			}
 		});
 
+		// keyboard controls
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -146,11 +152,12 @@ public class Game extends JPanel {
 		pellet.draw(brush);
 
 		// NEW: draw score in top right
-		brush.setColor(Color.black);
-		brush.setFont(new Font("Arial", Font.BOLD, 16));
-		brush.drawString("Score: " + score, getWidth() - 110, 20);
+		brush.setColor(Color.white);
+		brush.setFont(new Font("Arial", Font.BOLD, 18));
+		brush.drawString("Score: " + score, getWidth() - 120, 20);
 
-		// credit text
+		// original credit text
+		brush.setColor(Color.black);
 		brush.setFont(new Font("Arial", 0, 10));
 		brush.drawString("Created by: ARTech Industries", getWidth() - 146, getHeight() - 5);
 	}
@@ -162,8 +169,7 @@ public class Game extends JPanel {
 		for (int i = 0; i < numberOfRows; i++) {
 			for (int j = 0; j < numberOfColumns; j++) {
 
-				Color gridColor = j % 2 == incrementTracker ? new Color(220, 220, 220) : Color.white;
-
+				Color gridColor = j % 2 == incrementTracker ? new Color(0, 100, 0) : new Color(144, 238, 144);
 				g.setColor(gridColor);
 				g.fillRect(j * GRID_SIZE, i * GRID_SIZE, GRID_SIZE, GRID_SIZE);
 			}
