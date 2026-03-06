@@ -27,7 +27,7 @@ public class Game extends JPanel {
 	private Direction nextDirection = Direction.UP;
 	private int numberOfRows;
 	private int numberOfColumns;
-	private final int MOVEMENT_DELAY = 7; // higher value == snake moves slower
+	private final int MOVEMENT_DELAY = 22; // higher value == snake moves slower
 	private int movementDelayCounter;
 
 	public Game() {
