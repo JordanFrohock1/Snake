@@ -1,15 +1,14 @@
 package Models;
 
+import SwingShapes.Rectangle;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import SwingShapes.Ellipse;
-
 public class Segment {
-	private Ellipse segment;
+	private Rectangle segment;
 	
 	public Segment(int startXLocation, int startYLocation, Color color) {
-		segment = new Ellipse();
+		segment = new Rectangle();
 		segment.setColor(color);
 		segment.setSize(20,  20);
 		segment.setLocation(startXLocation, startYLocation);
