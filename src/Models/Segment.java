@@ -22,6 +22,10 @@ public class Segment {
 	public int getYLocation() {
 		return segment.getYLocation();
 	}
+
+	public Color getColor() {
+		return segment.getFillColor();
+	}
 	
 	public void setColor(Color color) {
 		segment.setColor(color);

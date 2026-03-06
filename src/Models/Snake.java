@@ -70,14 +70,9 @@ public class Snake {
 	public void move() {
 
 
-		Random random = new Random();
-		int red = random.nextInt(255);
-		int green = random.nextInt(255);
-		int blue = random.nextInt(255);
-		System.out.println(String.format("%s, %s, %s", red, green, blue));
 
 		Segment head = segments.get(0);
-		head.setColor(new Color(red, green, blue));
+		Color lastColor = segments.get(segments.size() - 1).getColor();
 		segments.remove(segments.size() - 1);
 		int newXLocation = head.getXLocation();
 		int newYLocation = head.getYLocation();
@@ -96,6 +91,11 @@ public class Snake {
 				break;
 		}
 		segments.add(0, new Segment(newXLocation, newYLocation, Color.green));
+		for (int i = 1; i < segments.size() - 1; i++) {
+			segments.get(i).setColor(segments.get(i+1).getColor());
+		}
+		segments.get(segments.size() -1).setColor(lastColor);
+
 	}
 
 	public void draw(Graphics2D g) {
