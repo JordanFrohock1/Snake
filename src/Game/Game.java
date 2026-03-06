@@ -30,6 +30,8 @@ public class Game extends JPanel {
 	private final int MOVEMENT_DELAY = 22; // higher value == snake moves slower
 	private int movementDelayCounter;
 
+	private int score = 0; // NEW: score variable
+
 	public Game() {
 		Window.setTitle("Snake");
 		setDoubleBuffered(true);
@@ -41,39 +43,40 @@ public class Game extends JPanel {
 		// game loop
 		timer = new Timer(1, new ActionListener() {
 
-			// this game loop method will continuously run over and over again
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// if enough time has gone by, snake will move one grid space in a direction based on the key pressed
+
 				if (movementDelayCounter >= MOVEMENT_DELAY) {
-					// change snake direction
+
 					if (nextDirection != null) {
 						snake.setDirection(nextDirection);
 					}
-					
-					// move snake
+
 					snake.move();
 
 					movementDelayCounter = 0;
 					nextDirection = null;
 				}
-				
-				// if snake hits screen boundaries, game over
-				if (snake.getXLocation() < 0 || snake.getXLocation() > getWidth() || snake.getYLocation() < 0 || snake.getYLocation() > getHeight()) {
+
+				// game over if snake hits wall
+				if (snake.getXLocation() < 0 || snake.getXLocation() > getWidth()
+						|| snake.getYLocation() < 0 || snake.getYLocation() > getHeight()) {
 					System.exit(1);
 				}
-				
-				// if snake hits its own tail, game over
+
+				// game over if snake hits its tail
 				if (snake.hasCollidedWithTail()) {
 					System.exit(1);
 				}
 
-				// if snake gets pellet, move pellet to new random location and add new segment on to snake's tail
+				// snake eats pellet
 				if (snake.getXLocation() == pellet.getXLocation() && snake.getYLocation() == pellet.getYLocation()) {
 					Point newPelletLocation = getRandomGridCoords();
 					pellet.setXLocation(newPelletLocation.x * GRID_SIZE);
 					pellet.setYLocation(newPelletLocation.y * GRID_SIZE);
 					snake.addSegment();
+
+					score++; // NEW: increase score
 				}
 
 				movementDelayCounter++;
@@ -82,97 +85,98 @@ public class Game extends JPanel {
 			}
 		});
 
-		// detects keyboard key presses
+		// keyboard controls
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+
 				if (nextDirection == null) {
-					// if A Key was pressed
+
 					if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 						if (snake.getDirection() == Direction.UP || snake.getDirection() == Direction.DOWN) {
 							nextDirection = Direction.LEFT;
 						}
 					}
-					 // if D Key was pressed
+
 					if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
 						if (snake.getDirection() == Direction.UP || snake.getDirection() == Direction.DOWN) {
 							nextDirection = Direction.RIGHT;
 						}
 					}
-					// if W Key was pressed
+
 					if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
 						if (snake.getDirection() == Direction.LEFT || snake.getDirection() == Direction.RIGHT) {
 							nextDirection = Direction.UP;
 						}
 					}
-					// if S Key was pressed
+
 					if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
 						if (snake.getDirection() == Direction.LEFT || snake.getDirection() == Direction.RIGHT) {
 							nextDirection = Direction.DOWN;
 						}
 					}
 				}
-
 			}
-
 		});
 
 		this.setFocusable(true);
 	}
 
-	// initializes game and starts game loop timer
 	public void startGame() {
-		// sets grid size based on width/height of the window
+
 		numberOfRows = this.getHeight() / GRID_SIZE;
 		numberOfColumns = this.getWidth() / GRID_SIZE;
 
-		// places pellet in a random location to start
 		Point pelletStartLocation = getRandomGridCoords();
 		pellet.setXLocation(pelletStartLocation.x * GRID_SIZE);
 		pellet.setYLocation(pelletStartLocation.y * GRID_SIZE);
 
-		// game loop starts iterating here
 		timer.start();
-		
+
 		this.grabFocus();
 	}
-	
-	// gets a random location in the grid
+
 	private Point getRandomGridCoords() {
 		Random random = new Random();
 		return new Point(random.nextInt(numberOfColumns), random.nextInt(numberOfRows));
 	}
 
-	// graphics are painted to the screen here
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		// create a Graphics2D brush to allow for painting grpahics to the screen
 		Graphics2D brush = (Graphics2D) g;
 
 		drawGrid(brush);
 		snake.draw(brush);
 		pellet.draw(brush);
 
-		// draw text "Created by" in bottom right corner
+		// NEW: draw score in top right
+		brush.setColor(Color.white);
+		brush.setFont(new Font("Arial", Font.BOLD, 18));
+		brush.drawString("Score: " + score, getWidth() - 120, 20);
+
+		// original credit text
 		brush.setColor(Color.black);
 		brush.setFont(new Font("Arial", 0, 10));
 		brush.drawString("Created by: ARTech Industries", getWidth() - 146, getHeight() - 5);
 	}
 
-	// paints the grid graphics to the screen
 	private void drawGrid(Graphics2D g) {
 		Color oldColor = g.getColor();
 		int incrementTracker = 0;
+
 		for (int i = 0; i < numberOfRows; i++) {
 			for (int j = 0; j < numberOfColumns; j++) {
+
 				Color gridColor = j % 2 == incrementTracker ? new Color(0, 100, 0) : new Color(144, 238, 144);
 				g.setColor(gridColor);
 				g.fillRect(j * GRID_SIZE, i * GRID_SIZE, GRID_SIZE, GRID_SIZE);
 			}
+
 			incrementTracker = incrementTracker == 0 ? 1 : 0;
 		}
+
 		g.setColor(oldColor);
 	}
 }
