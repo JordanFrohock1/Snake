@@ -88,25 +88,25 @@ public class Game extends JPanel {
 			public void keyPressed(KeyEvent e) {
 				if (nextDirection == null) {
 					// if A Key was pressed
-					if (e.getKeyCode() == KeyEvent.VK_A) {
+					if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 						if (snake.getDirection() == Direction.UP || snake.getDirection() == Direction.DOWN) {
 							nextDirection = Direction.LEFT;
 						}
 					}
 					 // if D Key was pressed
-					if (e.getKeyCode() == KeyEvent.VK_D) {
+					if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
 						if (snake.getDirection() == Direction.UP || snake.getDirection() == Direction.DOWN) {
 							nextDirection = Direction.RIGHT;
 						}
 					}
 					// if W Key was pressed
-					if (e.getKeyCode() == KeyEvent.VK_W) {
+					if (e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) {
 						if (snake.getDirection() == Direction.LEFT || snake.getDirection() == Direction.RIGHT) {
 							nextDirection = Direction.UP;
 						}
 					}
 					// if S Key was pressed
-					if (e.getKeyCode() == KeyEvent.VK_S) {
+					if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
 						if (snake.getDirection() == Direction.LEFT || snake.getDirection() == Direction.RIGHT) {
 							nextDirection = Direction.DOWN;
 						}
