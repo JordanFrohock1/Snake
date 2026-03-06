@@ -3,6 +3,7 @@ package Models;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Snake {
 	private LinkedList<Segment> segments = new LinkedList<Segment>();
@@ -33,18 +34,24 @@ public class Snake {
 	
 	public void addSegment() {
 		Segment tail = segments.get(segments.size() - 1);
+
+		Random random = new Random();
+		int red = random.nextInt(255);
+		int green = random.nextInt(255);
+		int blue = random.nextInt(255);
+		 
 		switch (direction) {
 			case LEFT:
-				segments.add(new Segment(tail.getXLocation() + movementAmount, tail.getYLocation(), new Color(0, 130, 255)));
+				segments.add(new Segment(tail.getXLocation() + movementAmount, tail.getYLocation(), new Color(red, green, blue)));
 				break;
 			case RIGHT:
-				segments.add(new Segment(tail.getXLocation() - movementAmount, tail.getYLocation(), new Color(0, 130, 255)));
+				segments.add(new Segment(tail.getXLocation() - movementAmount, tail.getYLocation(), new Color(red, green, blue)));
 				break;
 			case UP:
-				segments.add(new Segment(tail.getXLocation(), tail.getYLocation() + movementAmount, new Color(0, 130, 255)));
+				segments.add(new Segment(tail.getXLocation(), tail.getYLocation() + movementAmount, new Color(red, green, blue)));
 				break;
 			case DOWN:
-				segments.add(new Segment(tail.getXLocation(), tail.getYLocation() - movementAmount, new Color(0, 130, 255)));
+				segments.add(new Segment(tail.getXLocation(), tail.getYLocation() - movementAmount, new Color(red, green, blue)));
 				break;
 		}
 	}
@@ -61,8 +68,16 @@ public class Snake {
 	}
 
 	public void move() {
+
+
+		Random random = new Random();
+		int red = random.nextInt(255);
+		int green = random.nextInt(255);
+		int blue = random.nextInt(255);
+		System.out.println(String.format("%s, %s, %s", red, green, blue));
+
 		Segment head = segments.get(0);
-		head.setColor(new Color(0, 130, 255));
+		head.setColor(new Color(red, green, blue));
 		segments.remove(segments.size() - 1);
 		int newXLocation = head.getXLocation();
 		int newYLocation = head.getYLocation();
